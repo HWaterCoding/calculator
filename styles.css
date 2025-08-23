@@ -1,0 +1,36 @@
+body{
+    background-color: rgb(235, 235, 235);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
+
+#calc{
+    width: 700px;
+    /* border-radius: 20%; */
+    /* overflow: hidden; */
+}
+
+#display{
+    width: 100%;
+    font-size: 6em;
+    background-color: rgb(107, 107, 107);
+    color: white;
+}
+
+#keys{
+    background-color: aqua;
+    display: flex;
+    /* flex-direction: column; */
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+button{
+    background-color: grey;
+    font-size: 1.4em;
+    border-radius: 50%;
+}
