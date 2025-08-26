@@ -11,34 +11,42 @@
 <body>
     
     <div id="calc">
-        <input id="display">
-
-        <div id="keys">
-            <div id="numbers">
-                <button id="seven">7</button>
-                <button id="eight">8</button>
-                <button id="nine">9</button>
-                <button id="four">4</button>
-                <button id="five">5</button>
-                <button id="six">6</button>
-                <button id="one">1</button>
-                <button id="two">2</button>
-                <button id="three">3</button>
-                <button id="clear">C</button>
-                <button id="decimal">.</button>
-                <button id="zero">0</button>
+        <input id="display" placeholder="8888888">
+        
+            <div id="row1">
+                <button id="clearBtn" value="clear">C</button>
+                <button id="posNeg" class="operatorBtn" value="posNeg">+/-</button>
+                <button id="percent" class="operatorBtn" value="percent">%</button>
+                <button id="divide" class="operatorBtn" value="÷">÷</button>
             </div>
 
-            <div id="operators">
-                <button id="percent">+/-</button>
-                <button id="squareRoot">SQ</button>
-                <button id="multiply">X</button>
-                <button id="divide">÷</button>
-                <button id="subtract">-</button>
-                <button id="add">+</button>
-                <button id="equal">=</button>
+            <div id="row2">
+                <button id="seven" class="numberBtn" value="7">7</button>
+                <button id="eight" class="numberBtn" value="8">8</button>
+                <button id="nine" class="numberBtn" value="9">9</button>
+                <button id="multiply" class="operatorBtn" value="x">X</button>
             </div>
-        </div>
+
+            <div id="row3">
+                <button id="four" class="numberBtn" value="4">4</button>
+                <button id="five" class="numberBtn" value="5">5</button>
+                <button id="six" class="numberBtn" value="6">6</button>
+                <button id="subtract" class="operatorBtn" value="-">-</button>
+            </div>
+
+            <div id="row4">
+                <button id="one" class="numberBtn" value="1">1</button>
+                <button id="two" class="numberBtn" value="2">2</button>
+                <button id="three" class="numberBtn" value="3">3</button>
+                <button id="add" class="operatorBtn" value="+">+</button>
+            </div>
+
+             <div id="row5">
+                <button id="zero" class="numberBtn" value="0">0</button>
+                <button id="decimal" class="numberBtn" value=".">.</button>
+                <button id="backspace" class="operatorBtn" value="backspace">B</button>
+                <button id="equal" class="operatorBtn" value="equal">=</button>
+            </div>
 
     </div>
     
