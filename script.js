@@ -2,6 +2,8 @@
 let num1
 let operator
 let num2
+//variable to handle display update and delay on operatorBtn press for second value
+let secondValue = false;
 
 
 //add onclick listener to every button on calc to append value in display
@@ -33,26 +35,22 @@ buttons.forEach(button => {
         case "÷":
             num1 = parseFloat(display.value);
             operator = button.value;
-            display.value = "";
-            //the above works, but let's come back and fix it so that the display is cleared when 
-            //a new number is entered, NOT when the operator is pressed.
+            secondValue = true;
             break;
         case "equal":
             num2 = display.value;
             display.value = operate(num1, operator, num2);
             break;
-        default: 
+        default:
+            if(secondValue){
+                display.value = "";
+                secondValue = false;
+            }
             display.value += value;
             display.scrollLeft = display.scrollWidth;
         } 
     })
 });
-
-//calculator works but needs to be improved. Things to improve:
-//when a second operator is clicked, we need to execute the operate function or "equal" case so that it works 
-//like a regular calculator and updates the display value. otherwise 3x3x3 = 9 instead of 27.
-
-
 
 
 //basic functions for calculator logic to operate on numbers
@@ -72,15 +70,19 @@ function operate(num1, operator, num2){
 }
 
 
-const addition = (a, b) => a + b;
-const subtraction = (a, b) => a - b;
-const multiplication = (a, b) => a * b;
-const division = (a, b) => a / b;
+
+
+// const addition = (a, b) => a + b;
+// const subtraction = (a, b) => a - b;
+// const multiplication = (a, b) => a * b;
+// const division = (a, b) => a / b;
 
 
 
 
-
+//calculator works but needs to be improved. Things to improve:
+//when a second operator is clicked, we need to execute the operate function or "equal" case so that it works 
+//like a regular calculator and updates the display value. otherwise 3x3x3 = 9 instead of 27.
 
 
 

@@ -5,7 +5,7 @@
 }
 
 body{
-    background-color: rgb(184, 184, 184);
+    background: linear-gradient(45deg, rgb(0, 0, 0), rgb(60, 70, 80));
     margin: 0;
     height: 100vh;
     display: flex;
@@ -20,7 +20,8 @@ body{
     padding: 40px;
     /* overflow: hidden; */
     border-radius: 20px;
-    background-color: hsl(0, 0%, 15%);
+    background-color: transparent;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
 }
 
 #display{
@@ -29,53 +30,74 @@ body{
     padding: 10px;
     margin-bottom: 30px;
     text-align: right;
+    border: none;
+    background-color: transparent;
+    color: #fff;
 }
 
 #row1,
 #row2,
 #row3,
-#row4,
-#row5{
+#row4
+{
     display: flex;
     justify-content: space-between;
     margin-bottom: 20px;
 }
 
+#row5{
+    display: flex;
+    justify-content: space-between;
+}
+
 #clearBtn{
-    background-color: rgb(255, 0, 0);
+    background-color: rgb(200, 0, 0);
+    color: #fff;
 }
 
 button{
     font-size: 1.4rem;
     width: 90px;
     height: 90px;
+    font-weight: bold;
+    background-color: transparent;
+    color: rgb(0, 255, 255);
+    border: none;
+    box-shadow: 3px 3px 5px rgba(255, 255, 255, 0.4), -3px -3px 5px rgba(0, 0, 0, 0.4);
 }
 
-.operatorBtn{
-    background-color: aqua;
-    font-weight: bold;
+button:hover{
+    cursor: pointer;
 }
 
 .numberBtn{
-    background-color: rgb(199, 199, 199);
+    color: #fff;
 }
 
-
-
-/* #numbers{
-    max-width: 60%;
-    gap: 30px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
+button:active{
+    background-color: rgb(45, 45, 45);
+    transform: translate(1px, 1px);
 }
 
-#operators{
-    max-width: 40%;
-    gap: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-} */
+.operatorBtn, #equal{
+    font-size: 2rem;
+}
+
+.operatorBtn:focus,
+.operatorBtn:hover{
+    background-color: rgb(70, 70, 70);
+}
+
+a{
+    align-self: flex-end;
+    margin-top: 40px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: rgb(0, 255, 255);
+    text-decoration: none;
+}
+
+a:hover{
+    transform: translateY(-1px);
+    color: rgb(200, 255, 255);
+}
