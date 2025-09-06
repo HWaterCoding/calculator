@@ -35,6 +35,10 @@ body{
     color: #fff;
 }
 
+#display::placeholder{
+    color: #fff;
+}
+
 #row1,
 #row2,
 #row3,
