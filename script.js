@@ -29,15 +29,12 @@ buttons.forEach(button => {
             display.value = display.value * -1;
             break;
         case "%":
-            // if(display.value === "" || display.value === 0){
-            //     display.value += 0;
-            // }  
             if(operator){
-                num2 = parseFloat(display.value);
+                num2 = toNum(display.value);
                 display.value = operate(num1, "%", num2);
             }
             else{
-                display.value = parseFloat(display.value) / 100;
+                display.value = toNum(display.value) / 100;
             }
             break;
         case "backspace":
@@ -49,17 +46,17 @@ buttons.forEach(button => {
         case "÷":
             //add our chaining logic here
             if(operator){
-                num2 = parseFloat(display.value);
+                num2 = toNum(display.value);
                 display.value = operate(num1, operator, num2);
             }
-            num1 = parseFloat(display.value);
+            num1 = toNum(display.value);
             operator = value;
             opPressed = true;
             break;
         case "equal":
             if(operator){
                 if(opPressed === false){
-                    num2 = parseFloat(display.value);
+                    num2 = toNum(display.value);
                     lastNum = num2;
                 } 
                 else{
@@ -80,7 +77,7 @@ buttons.forEach(button => {
                 num2 = num1;
             }
             display.value = operate(num1, operator, num2);
-            num1 = parseFloat(display.value);
+            num1 = toNum(display.value);
             opPressed = true;
             break;
         case ".":
@@ -112,10 +109,17 @@ buttons.forEach(button => {
 });
 
 
+//function to handle instances of NaN
+function toNum(val){
+    let num = parseFloat(val);
+    return isNaN(num) ? 0 : num;
+}
+
+
 //function that handles basic calculator operation logic
 function operate(num1, operator, num2){
-    num1 = parseFloat(num1);
-    num2 = parseFloat(num2);
+    num1 = toNum(num1);
+    num2 = toNum(num2);
     switch(operator){
         case "+":
             return num1 + num2;
@@ -124,10 +128,7 @@ function operate(num1, operator, num2){
         case "x":
             return num1 * num2;
         case "÷":
-            if(num2 === 0){
-                return "NO.";
-            }   
-            return num1 / num2;
+            return num2 === 0 ? "NO." : num1 / num2;   
         case "%":
             return num1 * num2 / 100;
     }
