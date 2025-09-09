@@ -25,13 +25,20 @@ buttons.forEach(button => {
             opPressed = false;
             break;
         case "posNeg":
+            //FIX THIS BY JUST APPENDING A - TO THE FRONT OF DISPLAY.
             display.value = display.value * -1;
             break;
-        case "percent":
-            if(display.value === "" || display.value === 0){
-                display.value += 0;
+        case "%":
+            // if(display.value === "" || display.value === 0){
+            //     display.value += 0;
+            // }  
+            if(operator){
+                num2 = parseFloat(display.value);
+                display.value = operate(num1, "%", num2);
             }
-            display.value = parseFloat(display.value) / 100;
+            else{
+                display.value = parseFloat(display.value) / 100;
+            }
             break;
         case "backspace":
             display.value = display.value.slice(0, -1);
@@ -40,6 +47,11 @@ buttons.forEach(button => {
         case "-":
         case "x":
         case "÷":
+            //add our chaining logic here
+            if(operator){
+                num2 = parseFloat(display.value);
+                display.value = operate(num1, operator, num2);
+            }
             num1 = parseFloat(display.value);
             operator = value;
             opPressed = true;
@@ -51,13 +63,19 @@ buttons.forEach(button => {
                     lastNum = num2;
                 } 
                 else{
-                    num2 = lastNum;
+                    if(num2 !== ""){
+                        num2 = num2;
+                    } else {
+                        num2 = lastNum;
+                    }
                 }
             } 
             else{
                 return display.value;
             }
-            //If no 2nd number entered, assume it's the same as num1.
+            if(num1 === "" || isNaN(num1)){
+                num1 = 0;
+            }
             if(num2 === "" || isNaN(num2)){
                 num2 = num1;
             }
@@ -66,10 +84,14 @@ buttons.forEach(button => {
             opPressed = true;
             break;
         case ".":
-            if(display.value.includes(".")){
-                display.value = display.value;
+            if(opPressed){
+                display.value = "";
+                opPressed = false;
+            }
+            if(display.value === ""){
+                display.value += "0.";
             } 
-            else{
+            else if(!display.value.includes(".")){
                 display.value += value;
             }
             break;
@@ -106,6 +128,8 @@ function operate(num1, operator, num2){
                 return "NO.";
             }   
             return num1 / num2;
+        case "%":
+            return num1 * num2 / 100;
     }
 }
 
@@ -113,20 +137,15 @@ function operate(num1, operator, num2){
 //THINGS TO FIX NOW:
 
 //round answers with long decimal points to only 5 values after the decimal (maybe use math.floor?)
-//after a calculation, pressing a new digit needs to clear the display and replace it, not append it. 
-// ^^ EX: 2+4=6 (pressing 3 should not be 63, it should replace the 6 with a 3)
+//% logic needs to be revaluted. ex: 50 + 10 % = 55. Mine equals 50.1 because it divides 10 by 100.
 
-
-//Currently, there is no default num1 value, so if I just press + and then 3, it returns NaN, because by default, the display is empty, is num1 = "".
-// ^^ fix this maybe by removing the placeholder and instead having a default value of 0 in the display that gets erased on click of anything except 0 or . ^^
+//WHY does "2.3" + .3 = 2.5999999999?
 
 
 
-
-//fix the fact that you cant chain operations together. SEE BELOW
+//fix the fact that you cant chain operations together. (COMPLETE)
 //when a second operator is clicked, we need to execute the operate function or "equal" case so that it works 
 //like a regular calculator and updates the display value. otherwise 3x3x3 = 9 instead of 27.
-
 
 
 
@@ -142,3 +161,8 @@ function operate(num1, operator, num2){
 //don't allow user to append multiple decimal points to display(COMPLETE)
 //when entering a number, then hitting =, it returns undefined. Fix this. (COMPLETE)
 //7+= needs to return 14, not NaN. It returns NaN because num2 is undefined. Have num2 = num1 if num2 not specified.(COMPLETE)
+//after a calculation, pressing a new digit needs to clear the display and replace it, not append it. (COMPLETE)
+// ^^ EX: 2+4=6 (pressing 3 should not be 63, it should replace the 6 with a 3) (COMPLETE)
+//Currently, there is no default num1 value, so if I just press + and then 3, it returns NaN, because by default, the display is empty, is num1 = "". (COMPLETE)
+//on press of a decimal, it just shows "." but it should be "0." (COMPLETE)
+//when pressing a "." after an operator, display wont clear because I cant append 2 decimals. EX: 3.5+.2=5.5. (the . in .2 doesnt appear)(COMPLETE)
