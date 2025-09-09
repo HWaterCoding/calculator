@@ -2,14 +2,14 @@
 let num1
 let operator
 let num2
-//variable to handle display not clearing when operatorBtn clicked, and instead, wait for num2 to be entered
+//variable to determine if an operator has been pressed to handle display clearing and operation chaining
 let opPressed = false;
 //variable to store num2 for repeated presses of "="
 let lastNum
 
 
 //add onclick listener to every button on calc to append value in display
-//use switch statement to create exceptions for buttons to not be appended to display
+//use switch statement to create exceptions for operators and special case buttons
 const display = document.getElementById("display");
 const buttons = document.querySelectorAll("button");
 buttons.forEach(button => {
@@ -44,12 +44,13 @@ buttons.forEach(button => {
         case "-":
         case "x":
         case "÷":
-            //add our chaining logic here
-            if(operator){
+            if(operator && !opPressed){
                 num2 = toNum(display.value);
                 display.value = operate(num1, operator, num2);
+                num1 = toNum(display.value);
+            } else{
+                num1 = toNum(display.value);
             }
-            num1 = toNum(display.value);
             operator = value;
             opPressed = true;
             break;
@@ -60,22 +61,14 @@ buttons.forEach(button => {
                     lastNum = num2;
                 } 
                 else{
-                    if(num2 !== ""){
-                        num2 = num2;
-                    } else {
-                        num2 = lastNum;
-                    }
+                    num2 = lastNum;
                 }
             } 
             else{
                 return display.value;
             }
-            if(num1 === "" || isNaN(num1)){
-                num1 = 0;
-            }
-            if(num2 === "" || isNaN(num2)){
-                num2 = num1;
-            }
+            num1 = toNum(num1);
+            num2 = toNum(num2);
             display.value = operate(num1, operator, num2);
             num1 = toNum(display.value);
             opPressed = true;
@@ -135,18 +128,17 @@ function operate(num1, operator, num2){
 }
 
 
+
+
+
 //THINGS TO FIX NOW:
 
 //round answers with long decimal points to only 5 values after the decimal (maybe use math.floor?)
-//% logic needs to be revaluted. ex: 50 + 10 % = 55. Mine equals 50.1 because it divides 10 by 100.
-
+//Fix logic of turning numbers positive and negative by simply appending a "-" to the front of the display
 //WHY does "2.3" + .3 = 2.5999999999?
 
 
 
-//fix the fact that you cant chain operations together. (COMPLETE)
-//when a second operator is clicked, we need to execute the operate function or "equal" case so that it works 
-//like a regular calculator and updates the display value. otherwise 3x3x3 = 9 instead of 27.
 
 
 
@@ -167,3 +159,7 @@ function operate(num1, operator, num2){
 //Currently, there is no default num1 value, so if I just press + and then 3, it returns NaN, because by default, the display is empty, is num1 = "". (COMPLETE)
 //on press of a decimal, it just shows "." but it should be "0." (COMPLETE)
 //when pressing a "." after an operator, display wont clear because I cant append 2 decimals. EX: 3.5+.2=5.5. (the . in .2 doesnt appear)(COMPLETE)
+//% logic needs to be revaluted. ex: 50 + 10 % = 55. Mine equals 50.1 because it divides 10 by 100. (COMPLETE)
+//fix the fact that you cant chain operations together. (COMPLETE)
+//when a second operator is clicked, we need to execute the operate function or "equal" case so that it works 
+//like a regular calculator and updates the display value. otherwise 3x3x3 = 9 instead of 27.
