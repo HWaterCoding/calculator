@@ -25,13 +25,20 @@ buttons.forEach(button => {
             opPressed = false;
             break;
         case "posNeg":
-            //FIX THIS BY JUST APPENDING A - TO THE FRONT OF DISPLAY.
-            display.value = display.value * -1;
+            if(display.value === ""){
+                display.value += "-0";
+            }
+            else if(display.value.includes("-")){
+                display.value = display.value.slice(1);
+            }
+            else{
+                display.value = "-" + display.value;
+            }
             break;
         case "%":
             if(operator){
                 num2 = toNum(display.value);
-                display.value = operate(num1, "%", num2);
+                display.value = formatDecimals(operate(num1, "%", num2));
             }
             else{
                 display.value = toNum(display.value) / 100;
@@ -46,7 +53,7 @@ buttons.forEach(button => {
         case "÷":
             if(operator && !opPressed){
                 num2 = toNum(display.value);
-                display.value = operate(num1, operator, num2);
+                display.value = formatDecimals(operate(num1, operator, num2));
                 num1 = toNum(display.value);
             } else{
                 num1 = toNum(display.value);
@@ -69,7 +76,7 @@ buttons.forEach(button => {
             }
             num1 = toNum(num1);
             num2 = toNum(num2);
-            display.value = operate(num1, operator, num2);
+            display.value = formatDecimals(operate(num1, operator, num2));
             num1 = toNum(display.value);
             opPressed = true;
             break;
@@ -93,6 +100,9 @@ buttons.forEach(button => {
             if (display.value === "0" && value !== ".") {
                 display.value = value;
             }
+            else if(display.value === "-0"){
+                display.value = "-" + value;
+            }
             else{
                 display.value += value;
             }
@@ -100,6 +110,13 @@ buttons.forEach(button => {
         } 
     })
 });
+
+
+
+//function to limit results to 5 decimals
+function formatDecimals(value){
+    return parseFloat(value.toFixed(5));
+}
 
 
 //function to handle instances of NaN
@@ -131,16 +148,8 @@ function operate(num1, operator, num2){
 
 
 
+
 //THINGS TO FIX NOW:
-
-//round answers with long decimal points to only 5 values after the decimal (maybe use math.floor?)
-//Fix logic of turning numbers positive and negative by simply appending a "-" to the front of the display
-//WHY does "2.3" + .3 = 2.5999999999?
-
-
-
-
-
 
 
 
@@ -163,3 +172,7 @@ function operate(num1, operator, num2){
 //fix the fact that you cant chain operations together. (COMPLETE)
 //when a second operator is clicked, we need to execute the operate function or "equal" case so that it works 
 //like a regular calculator and updates the display value. otherwise 3x3x3 = 9 instead of 27.
+//Fix logic of turning numbers positive and negative by simply appending a "-" to the front of the display (COMPLETE)
+//round answers with long decimal points to only 5 values after the decimal (maybe use math.(method))? (COMPLETE)
+//try using toFixed() method to force decimal number (COMPLETE)
+//WHY does "2.3" + .3 = 2.59999999996? (COMPLETE)
