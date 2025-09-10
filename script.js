@@ -8,109 +8,156 @@ let opPressed = false;
 let lastNum
 
 
-//add onclick listener to every button on calc to append value in display
-//use switch statement to create exceptions for operators and special case buttons
+//store display and buttons in variables
 const display = document.getElementById("display");
 const buttons = document.querySelectorAll("button");
-buttons.forEach(button => {
-    button.addEventListener('click', () =>{
-        const value = button.value;
-        switch(value){
-        case "clear":
-            display.value = "";
-            num1 = "";
-            num2 = "";
-            operator = "";
-            lastNum = "";
+
+//create function to handle any button input
+function handleInput(value){
+    switch(value){
+    case "clear":
+        display.value = "";
+        num1 = "";
+        num2 = "";
+        operator = "";
+        lastNum = "";
+        opPressed = false;
+        break;
+    case "posNeg":
+        if(opPressed){
+            display.value = ""
             opPressed = false;
-            break;
-        case "posNeg":
-            if(display.value === ""){
-                display.value += "-0";
-            }
-            else if(display.value.includes("-")){
-                display.value = display.value.slice(1);
-            }
-            else{
-                display.value = "-" + display.value;
-            }
-            break;
-        case "%":
-            if(operator){
-                num2 = toNum(display.value);
-                display.value = formatDecimals(operate(num1, "%", num2));
-            }
-            else{
-                display.value = toNum(display.value) / 100;
-            }
-            break;
-        case "backspace":
-            display.value = display.value.slice(0, -1);
-            break;
-        case "+":
-        case "-":
-        case "x":
-        case "÷":
-            if(operator && !opPressed){
-                num2 = toNum(display.value);
-                display.value = formatDecimals(operate(num1, operator, num2));
-                num1 = toNum(display.value);
-            } else{
-                num1 = toNum(display.value);
-            }
-            operator = value;
-            opPressed = true;
-            break;
-        case "equal":
-            if(operator){
-                if(opPressed === false){
-                    num2 = toNum(display.value);
-                    lastNum = num2;
-                } 
-                else{
-                    num2 = lastNum;
-                }
-            } 
-            else{
-                return display.value;
-            }
-            num1 = toNum(num1);
-            num2 = toNum(num2);
+        }
+        if(display.value === ""){
+            display.value += "-0";
+        }
+        else if(display.value.includes("-")){
+            display.value = display.value.slice(1);
+        }
+        else{
+            display.value = "-" + display.value;
+        }
+        break;
+    case "%":
+        if(operator){
+            num2 = toNum(display.value);
+            display.value = formatDecimals(operate(num1, "%", num2));
+        }
+        else{
+            display.value = toNum(display.value) / 100;
+        }
+        break;
+    case "backspace":
+        display.value = display.value.slice(0, -1);
+        break;
+    case "+":
+    case "-":
+    case "x":
+    case "÷":
+        if(operator && !opPressed){
+            num2 = toNum(display.value);
             display.value = formatDecimals(operate(num1, operator, num2));
             num1 = toNum(display.value);
-            opPressed = true;
-            break;
-        case ".":
-            if(opPressed){
-                display.value = "";
-                opPressed = false;
-            }
-            if(display.value === ""){
-                display.value += "0.";
+        } else{
+            num1 = toNum(display.value);
+        }
+        operator = value;
+        opPressed = true;
+        break;
+    case "equal":
+        if(operator){
+            if(opPressed === false){
+                num2 = toNum(display.value);
+                lastNum = num2;
             } 
-            else if(!display.value.includes(".")){
-                display.value += value;
-            }
-            break;
-        default:
-            if(opPressed){
-                display.value = "";
-                opPressed = false;
-            }
-            if (display.value === "0" && value !== ".") {
-                display.value = value;
-            }
-            else if(display.value === "-0"){
-                display.value = "-" + value;
-            }
             else{
-                display.value += value;
+                num2 = lastNum;
             }
-            display.scrollLeft = display.scrollWidth;
         } 
-    })
-});
+        else{
+            return display.value;
+        }
+        num1 = toNum(num1);
+        num2 = toNum(num2);
+        display.value = formatDecimals(operate(num1, operator, num2));
+        num1 = toNum(display.value);
+        opPressed = true;
+        break;
+    case ".":
+        if(opPressed){
+            display.value = "";
+            opPressed = false;
+        }
+        if(display.value === ""){
+            display.value += "0.";
+        } 
+        else if(!display.value.includes(".")){
+            display.value += value;
+        }
+        break;
+    default:
+        if(opPressed){
+            display.value = "";
+            opPressed = false;
+        }
+        if (display.value === "0" && value !== ".") {
+            display.value = value;
+        }
+        else if(display.value === "-0"){
+            display.value = "-" + value;
+        }
+        else{
+            display.value += value;
+        }
+        display.scrollLeft = display.scrollWidth;
+    } 
+}
 
+
+//create event listener to process onclick of button
+buttons.forEach(button => {
+    button.addEventListener("click", () =>{
+        handleInput(button.value);
+    })
+})
+
+//create event listener to allow keyboard accessibility as well
+buttons.forEach(button => {
+    button.addEventListener("keydown", (e) =>{
+        let key = e.key;
+        if(!isNaN(key)){
+            handleInput(key);
+        }
+        else if(key === "+"){
+            handleInput("+");
+        }
+        else if(key === "-"){
+            handleInput("-");
+        }
+        else if(key === "*" || key.toLowerCase() === "x"){
+            handleInput("x");
+        }
+        else if(key === "/"){
+            handleInput("÷");
+        }
+        else if(key === "Enter" || key === "="){
+            e.preventDefault();
+            handleInput("equal");
+        }
+        else if(key === "."){
+            handleInput(".");
+        }
+        else if(key === "%"){
+            handleInput("%");
+        }
+        else if(key === "Backspace"){
+            handleInput("backspace");
+        }
+        else if(key.toLowerCase() === "c"){
+            handleInput("clear");
+        }
+    })
+})
 
 
 //function to limit results to 5 decimals
@@ -138,7 +185,8 @@ function operate(num1, operator, num2){
         case "x":
             return num1 * num2;
         case "÷":
-            return num2 === 0 ? "NO." : num1 / num2;   
+            // return num2 === 0 ? "NO." : num1 / num2;
+            return num1 / num2;   
         case "%":
             return num1 * num2 / 100;
     }
@@ -146,10 +194,113 @@ function operate(num1, operator, num2){
 
 
 
+// ===========I G N O R E CODE BELOW===============
 
+//initial solution without keyboard accessibility for reference point
 
+// buttons.forEach(button => {
+//     button.addEventListener('click', () =>{
+//         const value = button.value;
+//         switch(value){
+//         case "clear":
+//             display.value = "";
+//             num1 = "";
+//             num2 = "";
+//             operator = "";
+//             lastNum = "";
+//             opPressed = false;
+//             break;
+//         case "posNeg":
+//             if(opPressed){
+//                 display.value = ""
+//                 opPressed = false;
+//             }
+//             if(display.value === ""){
+//                 display.value += "-0";
+//             }
+//             else if(display.value.includes("-")){
+//                 display.value = display.value.slice(1);
+//             }
+//             else{
+//                 display.value = "-" + display.value;
+//             }
+//             break;
+//         case "%":
+//             if(operator){
+//                 num2 = toNum(display.value);
+//                 display.value = formatDecimals(operate(num1, "%", num2));
+//             }
+//             else{
+//                 display.value = toNum(display.value) / 100;
+//             }
+//             break;
+//         case "backspace":
+//             display.value = display.value.slice(0, -1);
+//             break;
+//         case "+":
+//         case "-":
+//         case "x":
+//         case "÷":
+//             if(operator && !opPressed){
+//                 num2 = toNum(display.value);
+//                 display.value = formatDecimals(operate(num1, operator, num2));
+//                 num1 = toNum(display.value);
+//             } else{
+//                 num1 = toNum(display.value);
+//             }
+//             operator = value;
+//             opPressed = true;
+//             break;
+//         case "equal":
+//             if(operator){
+//                 if(opPressed === false){
+//                     num2 = toNum(display.value);
+//                     lastNum = num2;
+//                 } 
+//                 else{
+//                     num2 = lastNum;
+//                 }
+//             } 
+//             else{
+//                 return display.value;
+//             }
+//             num1 = toNum(num1);
+//             num2 = toNum(num2);
+//             display.value = formatDecimals(operate(num1, operator, num2));
+//             num1 = toNum(display.value);
+//             opPressed = true;
+//             break;
+//         case ".":
+//             if(opPressed){
+//                 display.value = "";
+//                 opPressed = false;
+//             }
+//             if(display.value === ""){
+//                 display.value += "0.";
+//             } 
+//             else if(!display.value.includes(".")){
+//                 display.value += value;
+//             }
+//             break;
+//         default:
+//             if(opPressed){
+//                 display.value = "";
+//                 opPressed = false;
+//             }
+//             if (display.value === "0" && value !== ".") {
+//                 display.value = value;
+//             }
+//             else if(display.value === "-0"){
+//                 display.value = "-" + value;
+//             }
+//             else{
+//                 display.value += value;
+//             }
+//             display.scrollLeft = display.scrollWidth;
+//         } 
+//     })
+// });
 
-//THINGS TO FIX NOW:
 
 
 
@@ -176,3 +327,4 @@ function operate(num1, operator, num2){
 //round answers with long decimal points to only 5 values after the decimal (maybe use math.(method))? (COMPLETE)
 //try using toFixed() method to force decimal number (COMPLETE)
 //WHY does "2.3" + .3 = 2.59999999996? (COMPLETE)
+//add keyboard capabilities by including keydown values into the display! (COMPLETE)
