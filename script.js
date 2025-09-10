@@ -56,8 +56,15 @@ function handleInput(value){
     case "÷":
         if(operator && !opPressed){
             num2 = toNum(display.value);
-            display.value = formatDecimals(operate(num1, operator, num2));
-            num1 = toNum(display.value);
+            let result = operate(num1, operator, num2);
+                if(typeof result === "number"){
+                    display.value = formatDecimals(result);
+                    num1 = result;        
+                } 
+                else {
+                    display.value = result;
+                    num1 = "";
+                }
         } else{
             num1 = toNum(display.value);
         }
@@ -77,10 +84,15 @@ function handleInput(value){
         else{
             return display.value;
         }
-        num1 = toNum(num1);
-        num2 = toNum(num2);
-        display.value = formatDecimals(operate(num1, operator, num2));
-        num1 = toNum(display.value);
+        let result = operate(num1, operator, num2);
+        if(typeof result === "number"){
+            display.value = formatDecimals(result);
+            num1 = toNum(display.value);        
+        } 
+        else {
+            display.value = result;
+            num1 = "";
+        }
         opPressed = true;
         break;
     case ".":
@@ -185,8 +197,7 @@ function operate(num1, operator, num2){
         case "x":
             return num1 * num2;
         case "÷":
-            // return num2 === 0 ? "NO." : num1 / num2;
-            return num1 / num2;   
+            return num2 === 0 ? "No." : num1 / num2;
         case "%":
             return num1 * num2 / 100;
     }
@@ -194,9 +205,10 @@ function operate(num1, operator, num2){
 
 
 
+
 // ===========I G N O R E CODE BELOW===============
 
-//initial solution without keyboard accessibility for reference point
+//initial rough solution without keyboard usage. raw code for reference
 
 // buttons.forEach(button => {
 //     button.addEventListener('click', () =>{
